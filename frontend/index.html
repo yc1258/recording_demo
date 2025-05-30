@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多轨录制</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .track-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .track-header {
+            margin-bottom: 15px;
+        }
+        .device-selectors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .device-selectors button {
+            white-space: nowrap;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        .preview-container {
+            width: 100%;
+            height: 240px;
+            background: #000;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .preview-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 100%;
+            background-color: white;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .remove-track {
+            background: #f44336;
+        }
+        .remove-track:hover {
+            background: #da190b;
+        }
+        .preview-button {
+            background: #2196F3;
+            position: relative;
+            overflow: hidden;
+        }
+        .preview-button:hover {
+            background: #1976D2;
+        }
+        .preview-button:disabled {
+            background: #cccccc;
+        }
+        .preview-button.active {
+            background: #f44336;
+        }
+        .preview-button.active:hover {
+            background: #d32f2f;
+        }
+        .control-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .status.recording {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .status.ready {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status.error {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+        @media (max-width: 768px) {
+            .device-selectors {
+                grid-template-columns: 1fr;
+            }
+            .button-container {
+                justify-content: flex-start;
+            }
+            .device-selectors button {
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>多轨录制</h1>
+        <div id="tracks-container"></div>
+        <div class="control-buttons">
+            <button id="addTrack">添加轨道</button>
+            <button id="startRecording" disabled>开始录制</button>
+            <button id="stopRecording" >停止录制</button>
+        </div>
+        <!-- <div id="canvas-container">
+            <canvas id="canvas" width="200" height="200"></canvas>
+             <video id="my-video" width="200" height="200" autoplay></video>
+        </div> -->
+        <div id="status" class="status ready">就绪</div>
+    </div>
+
+    <script type="module">
+        import { MultiTrackRecorder } from './MultiTrackRecorder.js';
+        
+        // 等待DOM加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                window.recorder = new MultiTrackRecorder();
+                console.log('MultiTrackRecorder初始化成功');
+            } catch (error) {
+                console.error('MultiTrackRecorder初始化失败:', error);
+                document.getElementById('status').textContent = '初始化失败: ' + error.message;
+                document.getElementById('status').className = 'status error';
+            }
+        });
+    </script>
+</body>
+</html>
